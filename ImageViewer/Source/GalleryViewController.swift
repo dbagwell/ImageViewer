@@ -65,6 +65,11 @@ open class GalleryViewController: UIPageViewController, ItemControllerDelegate {
     open var programmaticallyClosedCompletion: (() -> Void)?
     /// If set, launched after all animations finish when the swipe-to-dismiss (applies to all directions and cases) gesture is used.
     open var swipedToDismissCompletion:        (() -> Void)?
+    
+    open override var prefersStatusBarHidden: Bool {
+
+        return statusBarHidden
+    }
 
     @available(*, unavailable)
     required public init?(coder: NSCoder) { fatalError() }
@@ -167,9 +172,8 @@ open class GalleryViewController: UIPageViewController, ItemControllerDelegate {
 
         ///This less known/used presentation style option allows the contents of parent view controller presenting the gallery to "bleed through" the blurView. Otherwise we would see only black color.
         self.modalPresentationStyle = .overFullScreen
+        self.modalPresentationCapturesStatusBarAppearance = true
         self.dataSource = pagingDataSource
-
-        UIApplication.applicationWindow.windowLevel = (statusBarHidden) ? UIWindow.Level.statusBar + 1 : UIWindow.Level.normal
 
         NotificationCenter.default.addObserver(self, selector: #selector(GalleryViewController.rotate), name: UIDevice.orientationDidChangeNotification, object: nil)
 
@@ -596,7 +600,6 @@ open class GalleryViewController: UIPageViewController, ItemControllerDelegate {
 
         self.dismiss(animated: animated) {
 
-            UIApplication.applicationWindow.windowLevel = UIWindow.Level.normal
             completion?()
         }
     }

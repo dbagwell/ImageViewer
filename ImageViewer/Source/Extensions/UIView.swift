@@ -17,8 +17,9 @@ extension UIView {
 
     func frame(inCoordinatesOfView parentView: UIView) -> CGRect {
 
-        let frameInWindow = UIApplication.applicationWindow.convert(self.bounds, from: self)
-        return parentView.convert(frameInWindow, from: UIApplication.applicationWindow)
+        guard let window = parentView.window else { return .zero }
+        let frameInWindow = window.convert(self.bounds, from: self)
+        return parentView.convert(frameInWindow, from: window)
     }
 
     func addSubviews(_ subviews: UIView...) {
